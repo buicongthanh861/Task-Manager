@@ -29,7 +29,7 @@ export default function DashboardPage() {
   return (
     <div className="dashboard">
       <header className="dash-header">
-        <h1>📋 Task Manager</h1>
+        <h1>📋 Task Manager BCT</h1>
         <div className="header-right">
           <span>Xin chào, <strong>{user?.name}</strong></span>
           <button className="btn-primary" onClick={() => setModal('new')}>+ Tạo task</button>
