@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI } from '../services/api';
-import jwtDecode from 'jwt-decode'; // npm install jwt-decode
+import { jwtDecode } from 'jwt-decode';
 
 const Ctx = createContext(null);
 
