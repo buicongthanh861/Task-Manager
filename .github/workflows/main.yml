@@ -88,6 +88,8 @@ jobs:
           tags: |
             congthanh19/taskmanager-frontend:${{ github.sha }}
             congthanh19/taskmanager-frontend:latest
+          build-args: |
+            VITE_API_URL=http://api.local/api
           cache-from: type=gha
           cache-to: type=gha,mode=max
       
@@ -99,8 +101,6 @@ jobs:
           tags: |
             congthanh19/taskmanager-backend:${{ github.sha }}
             congthanh19/taskmanager-backend:latest
-          build-args: |
-            VITE_API_URL=http://api.local/api
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
