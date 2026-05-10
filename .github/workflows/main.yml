@@ -103,4 +103,35 @@ jobs:
             congthanh19/taskmanager-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  Gitops-deploy:
+    name: Deploy to GitOps
+    runs-on: ubuntu-latest
+    needs: Docker-build
+    timeout-minutes: 20
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: buicongthanh861/Taskmanager-infra
+          token: ${{ secrets.FULLSTACK_DEPLOY_TOKEN }}
+          path: Taskmanager-infra
+        
+      - name: setup yqcli
+        uses: yq-actions/setup-yq@v1
+      
+      - name: update k8s deployment file
+        run: |
+          yq e -i '.container.tag = "congthanh19/taskmanager-frontend:${GITHUB_SHA}"' Taskmanager-infra/k8s/frontend/values.yaml
+          yq e -i '.container.tag = "congthanh19/taskmanager-backend:${GITHUB_SHA}"' Taskmanager-infra/k8s/backend/values.yaml
+      
+      - name: Commit and Push changes
+        run: |
+          cd Taskmanager-infra
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+          git add .
+          git commit -m "chore: update image tags to ${{ github.sha }} [skip ci]"
+          git push origin main
+
+    
 
