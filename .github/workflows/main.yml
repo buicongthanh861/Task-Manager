@@ -115,15 +115,54 @@ jobs:
           repository: buicongthanh861/Taskmanager-infra
           token: ${{ secrets.FULLSTACK_DEPLOY_TOKEN }}
           path: Taskmanager-infra
-        
+      
+      - name: Debug repo
+        run: |
+          set -euxo pipefail
+
+          echo "Current directory:"
+          pwd
+
+          echo "List files:"
+          ls -la
+
+          echo "Infra repo files:"
+          ls -la Taskmanager-infra
+
+          echo "Current branch:"
+          cd Taskmanager-infra
+          git branch
+      - name: Show values before update
+        run: |
+          echo "=== FRONTEND BEFORE ==="
+          cat Taskmanager-infra/k8s/frontend/values.yaml
+
+          echo "=== BACKEND BEFORE ==="
+          cat Taskmanager-infra/k8s/backend/values.yaml  
       - name: setup yqcli
         uses: yq-actions/setup-yq@v1
       
       - name: update k8s deployment file
         run: |
-          yq e -i '.container.tag = "congthanh19/taskmanager-frontend:${GITHUB_SHA}"' Taskmanager-infra/k8s/frontend/values.yaml
-          yq e -i '.container.tag = "congthanh19/taskmanager-backend:${GITHUB_SHA}"' Taskmanager-infra/k8s/backend/values.yaml
+          yq e -i ".container.tag = \"congthanh19/taskmanager-frontend:${GITHUB_SHA}\"" Taskmanager-infra/k8s/frontend/values.yaml
+          yq e -i ".container.tag = \"congthanh19/taskmanager-backend:${GITHUB_SHA}\"" Taskmanager-infra/k8s/backend/values.yaml
       
+      - name: Show values after update
+        run: |
+          echo "=== FRONTEND AFTER ==="
+          cat Taskmanager-infra/k8s/frontend/values.yaml
+
+          echo "=== BACKEND AFTER ==="
+          cat Taskmanager-infra/k8s/backend/values.yaml
+      
+      - name: Git diff
+        run: |
+          cd Taskmanager-infra
+          
+          echo "Git status:"
+          git status
+          echo "Git diff:"
+          git diff
       - name: Commit and Push changes
         run: |
           cd Taskmanager-infra
