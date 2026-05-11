@@ -23,14 +23,14 @@ jobs:
           node-version: '20'
       # checkcode backend
       - name: check backend code
-        run: npm install
+        run: npm ci
         working-directory: ./backend
       - name: Run backend tests
         run: npm test
         working-directory: ./backend
       # checkcode frontend
       - name: check frontend code
-        run: npm install
+        run: npm ci
         working-directory: ./frontend
       - name: Run frontend tests
         run: npm test
@@ -140,7 +140,12 @@ jobs:
           echo "=== BACKEND BEFORE ==="
           cat Taskmanager-infra/k8s/backend/values.yaml  
       - name: setup yqcli
-        uses: yq-actions/setup-yq@v1
+        run: | 
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          sudo chmod +x /usr/bin/yq
+      
+      - name: Check yq
+        run: yq --version
       
       - name: update k8s deployment file
         run: |
