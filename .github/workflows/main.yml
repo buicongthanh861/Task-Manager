@@ -85,6 +85,7 @@ jobs:
         with:
           context: ./frontend
           push: true
+          no-cache: true
           tags: |
             congthanh19/taskmanager-frontend:${{ github.sha }}
             congthanh19/taskmanager-frontend:latest
@@ -98,6 +99,7 @@ jobs:
         with:
           context: ./backend
           push: true
+          no-cache: true
           tags: |
             congthanh19/taskmanager-backend:${{ github.sha }}
             congthanh19/taskmanager-backend:latest
